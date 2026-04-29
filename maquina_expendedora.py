@@ -47,29 +47,33 @@ match producto:
         producto_especifico = jumex        
 
 print("Procesando pago...")
-# time.sleep(2)
+time.sleep(2)
 
-if total_pagado > producto_especifico:
-    vuelto = total_pagado - producto_especifico
-    vuelto_impreso = vuelto
-    while vuelto != 0:
-        if vuelto >= 500:
-            vuelto -= 500
-            cont_500 += 1
-        elif vuelto >= 100:
-            vuelto -= 100
-            cont_100 += 1
-        elif vuelto >= 50:
-            vuelto -= 50
-            cont_50 += 1
-        elif vuelto >= 10:
-            vuelto -= 10
-            cont_10 += 1
-print(f'''Su vuelto es de {vuelto_impreso}: 
-      {cont_500} monedas de 500
-      {cont_100} monedas de 100
-      {cont_50} monedas de 50
-      {cont_10} monedas de 10''')
+if total_pagado == producto_especifico:
+    print("Producto entregado")
+else:
+    vuelto_impreso = 0
+    if total_pagado > producto_especifico:
+        vuelto = total_pagado - producto_especifico
+        vuelto_impreso = vuelto
+        while vuelto != 0:
+            if vuelto >= 500:
+                vuelto -= 500
+                cont_500 += 1
+            elif vuelto >= 100:
+                vuelto -= 100
+                cont_100 += 1
+            elif vuelto >= 50:
+                vuelto -= 50
+                cont_50 += 1
+            elif vuelto >= 10:
+                vuelto -= 10
+                cont_10 += 1
+    print(f'''Su vuelto es de {vuelto_impreso}: 
+        {cont_500} monedas de 500
+        {cont_100} monedas de 100
+        {cont_50} monedas de 50
+        {cont_10} monedas de 10''')
         
 
 

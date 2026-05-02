@@ -61,7 +61,7 @@ while hp_heroe > 0 and hp_monstuo > 0:
         case 3:
             hp_monstuo = attack_special(hp_monstuo)
         case 4:
-            hp_heroe = 0 # pylint: disable=invalid-name
+            hp_heroe = 0 
             print("Eres una verguenza")
             break
     if hp_monstuo > 0:

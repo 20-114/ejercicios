@@ -15,46 +15,44 @@ A las latas internacionales se les debe pegar un sticker de validación sanitari
 
 Ej: 800gr, 7%, 2(internacional) -> lata mediana especial con sticker sanitario
 '''
-try:
-    peso_producto = int(input("Ingrese el peso en gramos: "))
-    while peso_producto <0:
-        if peso_producto < 0:
-            print("Solo puede ingresar números positivos")
-            peso_producto = int(input("Ingrese el peso: "))
-except ValueError:
-    print("Solo se pueden ingresar números")
-
-
-metodo_de_venta = ""
-try:
-    venta = int(input('''
+def evaluacion_metodo_de_venta(venta): 
+    while venta < 1 or venta > 2:
+        print("Solo puede ingresar 1 o 2")
+        venta = int(input('''
 Indica si el producto se vendera de manera nacional o internacional:
 1. Nacional
 2. Internacional
-'''))
-    while 1 > venta > 2:
-        if venta < 1:
-            print("Solo puede ingresar 1 o 2")
-            venta = int(input('''
-Indica si el producto se vendera de manera nacional o internacional:
-1. Nacional
-2. Internacional
-'''))
-        elif venta > 2:
-            print("Solo puede ingresar 1 o 2")
-            venta = int(input('''
-Indica si el producto se vendera de manera nacional o internacional:
-1. Nacional
-2. Internacional
-'''))
+: '''))
     match venta:
         case 1:
-            metodo_de_venta = "Nacional"
+            return "Nacional"
         case 2:
-            metodo_de_venta = "Internacional"
-except TypeError:
-    print("Solo puede ingresar números, 1 o 2")
+            return "Internacional"
+def evaluacion_peso(peso_funcion):
+    while peso_funcion < 0:
+        print("Solo puede ingresar números positivos")
+        peso_funcion = int(input("Ingrese el peso: "))
+    return peso_funcion
 
+while True:
+    try:
+        peso = int(input("Ingrese el peso en gramos: "))
+        peso_producto = evaluacion_peso(peso)
+        break
+    except: 
+        print("Solo se pueden ingresar números")
+# print(peso_producto)
 
-
+while True:
+    try:
+        metodo = int(input('''
+Indica si el producto se vendera de manera nacional o internacional:
+1. Nacional
+2. Internacional
+: '''))
+        metodo_de_venta = evaluacion_metodo_de_venta(metodo)
+        break
+    except:
+        print("Solo pueden ingresar números, 1 o 2")
+print(metodo_de_venta)
 

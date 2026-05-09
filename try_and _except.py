@@ -21,15 +21,15 @@ def evaluacion_peso(peso_funcion):
         print("Solo puede ingresar números positivos")
         peso_funcion = float(input("Ingrese el peso: "))
     return peso_funcion
-def evaluación_Na(sodio):
-    while sodio < 0 or sodio > 100:
-        if sodio < 0:
+def evaluación_Na(sodio_funcion):
+    while sodio_funcion < 0 or sodio_funcion > 100:
+        if sodio_funcion < 0:
             print("Solo se pueden ingresar números positivos")
-            sodio = float(input("Ingrese el porcentaje de sodio: "))
-        if sodio > 100:
+            sodio_funcion = float(input("Ingrese el porcentaje de sodio: "))
+        elif sodio_funcion > 100:
             print("El valor máximo es 100")
-            sodio = float(input("Ingrese el porcentaje de sodio: "))
-    return sodio
+            sodio_funcion = float(input("Ingrese el porcentaje de sodio: "))
+    return sodio_funcion
 def evaluacion_metodo_de_venta(metodo_funcion): 
     while metodo_funcion < 1 or metodo_funcion > 2:
         print("Solo puede ingresar 1 o 2")
@@ -75,7 +75,7 @@ while True:     #control de errores metodo de venta
 
 tamaño = ""
 tipo = ""
-# venta_publico = ""
+
 if peso_producto < 500: #tamaño de lata
     tamaño = "normal"
 elif peso_producto <= 1500:

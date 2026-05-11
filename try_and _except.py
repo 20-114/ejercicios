@@ -16,12 +16,12 @@ A las latas internacionales se les debe pegar un sticker de validación sanitari
 
 Ej: 800gr, 7%, 2(internacional) -> lata mediana especial con sticker sanitario
 '''
-def evaluacion_peso(peso_funcion):
+def ingreso_peso(peso_funcion):
     while peso_funcion < 0:
         print("Solo puede ingresar números positivos")
         peso_funcion = float(input("Ingrese el peso: "))
     return peso_funcion
-def evaluación_Na(sodio_funcion):
+def ingreso_Na(sodio_funcion):
     while sodio_funcion < 0 or sodio_funcion > 100:
         if sodio_funcion < 0:
             print("Solo se pueden ingresar números positivos")
@@ -30,7 +30,7 @@ def evaluación_Na(sodio_funcion):
             print("El valor máximo es 100")
             sodio_funcion = float(input("Ingrese el porcentaje de sodio: "))
     return sodio_funcion
-def evaluacion_metodo_de_venta(metodo_funcion): 
+def ingreso_metodo_de_venta(metodo_funcion): 
     while metodo_funcion < 1 or metodo_funcion > 2:
         print("Solo puede ingresar 1 o 2")
         metodo_funcion = int(input('''
@@ -48,7 +48,7 @@ Indica si el producto se vendera de manera nacional o internacional:
 while True:     #control de errores de peso de la lata
     try:
         peso = int(input("Ingrese el peso en gramos: "))
-        peso_producto = evaluacion_peso(peso)
+        peso_producto = ingreso_peso(peso)
         break
     except: 
         print("Solo se pueden ingresar números")
@@ -56,7 +56,7 @@ while True:     #control de errores de peso de la lata
 while True:     #control de errores del porcentaje de sodio
     try:
         porcentaje_Na = float(input("Ingrese el porcentaje de sodio: "))
-        porcentaje_sodio = evaluación_Na(porcentaje_Na)
+        porcentaje_sodio = ingreso_Na(porcentaje_Na)
         break
     except:
         print("Solo se pueden ingresar números")
@@ -67,7 +67,7 @@ while True:     #control de errores metodo de venta
 1. Nacional
 2. Internacional
 : '''))
-        metodo_de_venta = evaluacion_metodo_de_venta(metodo)
+        metodo_de_venta = ingreso_metodo_de_venta(metodo)
         break
     except:
         print("Solo pueden ingresar números, 1 o 2")

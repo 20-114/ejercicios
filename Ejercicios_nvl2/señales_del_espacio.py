@@ -42,10 +42,16 @@ while True:
 # print(codigo_señal[2])
 energia_de_señal = 0
 for i in codigo_señal:
-    if codigo_señal[i] % 2 == 0:
+    if codigo_señal.index(i) % 2 == 0 and i == str(range(0,10)):
+        print(i)
         energia_de_señal += int(i)
+        print(energia_de_señal)
+    elif i == "a"or i == "e"or i == "i"or i == "o"or i == "u":
+        print(f"{i} es vocal")
+    else:
+        print(f"{i} NO es vocal")
 
-        
 
+print(energia_de_señal)
 
 

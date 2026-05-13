@@ -39,19 +39,20 @@ while True:
     except ValueError:
         print("Ingreso Invalido")
 
-# print(codigo_señal[2])
-energia_de_señal = 0
+energia_de_señal = 0.0
 for i in codigo_señal:
-    if codigo_señal.index(i) % 2 == 0 and i == str(range(0,10)):
-        print(i)
-        energia_de_señal += int(i)
-        print(energia_de_señal)
-    elif i == "a"or i == "e"or i == "i"or i == "o"or i == "u":
-        print(f"{i} es vocal")
-    else:
-        print(f"{i} NO es vocal")
+    if codigo_señal.index(i) % 2 == 0:
+        if i in "1234567890": # == "1" or i == "2" or i == "3" or i == "4" or i == "5" or i == "6" or i == "7" or i == "8" or i == "9" or i == "0":
+            print(i)
+            energia_de_señal += float(i)
+    elif codigo_señal.index(i) % 2 != 0:
+        if i in "aeiou": #== "a"or i == "e"or i == "i"or i == "o"or i == "u":
+            print(f"{i} es vocal")
+        elif i in "bcdfghjklmnñpqrstvwxyz":
+            print(f"{i} NO es vocal")
 
-
-print(energia_de_señal)
+promedio_valor_caracteres = energia_de_señal / len(codigo_señal)
+print(f"Suma total obtenida: {energia_de_señal}")
+print(f"Promedio de los valores: {promedio_valor_caracteres}")
 
 

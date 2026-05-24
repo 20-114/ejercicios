@@ -23,22 +23,39 @@ una cadena de texto que representa la cabecera de red. El sistema
 debe evaluar los primeros caracteres de esa cadena para clasificar 
 el paquete en uno de los siguientes 4 protocolos de seguridad:
 
-Clasificación "SYS" (Paquetes de Sistema):
+1. Clasificación "SYS" (Paquetes de Sistema):
 
 Se evalúa la longitud de la cadena. Si la longitud es un múltiplo 
 exacto de 2, el paquete se considera "Estable". Si es impar, se 
 considera "Inestable" e incrementa un contador de anomalías del sistema.
 
-Clasificación "DAT" (Paquetes de Datos):
+2. Clasificación "DAT" (Paquetes de Datos - Inspección Híbrida de Payload):
 
-El sistema solicita el ingreso del tamaño del bloque de datos entrante 
-y el tamaño del bloque saliente.
+Ingreso de Contenido: El sistema solicita una cadena de texto que representa 
+la petición del cliente (el contenido del paquete). El Tamaño de Entrada se 
+define automáticamente por la cantidad de caracteres que tenga este texto.
 
-Debe calcular la diferencia absoluta entre ambos tamaños. Si la 
-diferencia absoluta es mayor a 50, se asume que hay una fuga de datos 
-en curso y la integridad total del servidor disminuye en 10 puntos.
+Escaneo de Contenido (DPI): El cortafuegos analiza el texto introducido 
+en busca de palabras clave de alto riesgo: "DOWNLOAD", "EXPORT" o "BACKUP".
 
-Clasificación "SEC" (Tokens de Seguridad):
+Generación Automática de Respuesta: El servidor simula el tamaño de 
+la respuesta de la siguiente manera:
+
+    Si contiene palabras de riesgo: El servidor procesa una transferencia
+    masiva. El Tamaño de Salida será el tamaño de la entrada multiplicado 
+    por un factor aleatorio entre 10 y 15.
+
+    Si NO contiene palabras de riesgo: Se asume tráfico web normal. El Tamaño 
+    de Salida será el tamaño de la entrada multiplicado por un factor aleatorio 
+    entre 1 y 3.
+
+Evaluación de Fuga: Se calcula la diferencia absoluta (el desvío numérico 
+sin importar el signo) entre el Tamaño de Entrada y el Tamaño de Salida. 
+Si esta diferencia es mayor a 50 unidades, el cortafuegos detecta una 
+anomalía por "Fuga de Información" y la integridad total del servidor 
+disminuye en 10 puntos.
+
+3. Clasificación "SEC" (Tokens de Seguridad):
 
 Solicita un código numérico de autenticación.
 
@@ -48,7 +65,7 @@ tiene un residuo de división igual a cero al evaluarse mutuamente (es decir,
 uno es divisible por el otro), el token se acepta como válido y el servidor 
 recupera 5 puntos de integridad (máximo de integridad permitido: 100).
 
-Cualquier otra cabecera no identificada:
+4. Cualquier otra cabecera no identificada:
 
 El paquete se clasifica automáticamente como "Ataque de Fuerza Bruta". La 
 integridad del servidor se reduce inmediatamente en 15 puntos y se emite 

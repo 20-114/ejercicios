@@ -1,1 +1,0 @@
-                transaccion = int(transaccion)

@@ -29,10 +29,16 @@ total de puertos atacados por esa IP es impar, muestra "Tráfico bajo
 análisis". Al final, muestra el reporte completo de qué puertos tocó 
 cada IP.
 '''
-# import random
+import random
+
 # ips = {}
 # for ronda in range(3):
+
+# ips = [] # Inicializamos como lista como solicitaste
+
+# for ronda in range(1, 6): # Exactamente 5 rondas según el desafío
 #     puerto = random.randint(1, 100)
+#     print(f"\n--- Ronda {ronda} (Puerto generado: {puerto}) ---")
 #     dirIP = input("Ingrese la dirección IP: ").strip()
 #     ingreso_ip = {'IP' : dirIP , 'puertos' : puerto}
 #     for indx, elemento in ips:
@@ -41,37 +47,42 @@ cada IP.
 #         else:
 #             ips.append(ingreso_ip)
 
-# print(ips)
 
 
-import random
 
-# Usamos un diccionario para que la búsqueda de IP sea instantánea y evitar modificar listas en loops
-historial_ips = {} 
+ips = [] # Inicializamos como lista como solicitaste
 
-for ronda in range(1, 6): # Exactamente 5 rondas
-    print(f"\n--- Ronda {ronda} ---")
+for ronda in range(1, 6): # Exactamente 5 rondas según el desafío
     puerto = random.randint(1, 100)
+    print(f"\n--- Ronda {ronda} (Puerto generado: {puerto}) ---")
     dirIP = input("Ingrese la dirección IP: ").strip()
 
-    # Control de seguridad: Validar IP vacía
+    # Control de seguridad: IP vacía
     if not dirIP:
-        print("Anomalía de origen detectada: IP vacía. Ignorando puerto.")
+        print("Anomalía de origen: IP vacía. Ignorando ronda.")
         continue
 
-    # Si la IP es válida, registramos el puerto
-    if dirIP not in historial_ips:
-        historial_ips[dirIP] = []
-    historial_ips[dirIP].append(puerto)
-    print(f"Conexión registrada en puerto {puerto}")
+    encontrado = False
+    # Buscamos si la IP ya existe en nuestra lista de diccionarios
+    for registro in ips:
+        if registro['IP'] == dirIP:
+            registro['puertos'].append(puerto)
+            encontrado = True
+            break # Ya la encontramos, no hace falta seguir buscando
 
-print("\n" + "="*30)
-print("REPORTE DE AUDITORÍA")
-print("="*30)
+    # Si después de recorrer toda la lista no existe, la creamos
+    if not encontrado:
+        # El puerto se guarda en una lista [puerto] para poder usar .append después
+        ips.append({'IP': dirIP, 'puertos': [puerto]})
 
-for ip, puertos in historial_ips.items():
-    total_ataques = len(puertos)
-    tipo_trafico = "Sospecha de escaneo de red" if total_ataques % 2 == 0 else "Tráfico bajo análisis"
+print("\n" + "="*40)
+print("REPORTE FINAL DE CONEXIONES")
+print("="*40)
+
+# Inspección final de registros
+for registro in ips:
+    total_puertos = len(registro['puertos'])
+    # Lógica de par (Escaneo) o impar (Análisis)
+    alerta = "Sospecha de escaneo de red" if total_puertos % 2 == 0 else "Tráfico bajo análisis"
     
-    print(f"IP: {ip} | Puertos: {puertos} | Resultado: {tipo_trafico}")
-    print(historial_ips)
+    print(f"IP: {registro['IP']} | Puertos: {registro['puertos']} | Resultado: {alerta}")

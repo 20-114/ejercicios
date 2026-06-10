@@ -1,1 +1,1 @@
-    # 'hola 1' : []
+    print(ram_actual)

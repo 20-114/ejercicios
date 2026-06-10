@@ -39,48 +39,64 @@ def promedio_datos(servidor):
     'calcula el promedio hasta los ultomos 3 consumos anteriores'
     if servidor in telemetria_ram:
         suma_porcentajes = 0
-        cont = 1
-        for porcentaje in telemetria_ram[servidor]:
-            if cont > 3:
-                break
+        div = 0
+        for porcentaje in telemetria_ram[servidor][-3:]:
+            div += 1
+            print(porcentaje)
             suma_porcentajes += porcentaje
-            cont += 1
-        prom = (suma_porcentajes / (cont-1))
+        prom = (suma_porcentajes / (div))
         print(f"promedio {prom}")
         return int(prom)
     else:
         return 0
+def mostrar_servidores():
+    'imprime los servidores y sus valores en orden vertical'
+    for servidor, ram in telemetria_ram.items():
+        print(f"Servidor: {servidor} | %ram: {ram}")
 def finalizar(ingreso):
     'apagara el sistema cuando se escriba la palabra FINALIZAR'
-    ingreso = str(ingreso.upper())
+    ingreso = ingreso.upper()
     if ingreso == "FINALIZAR":
+        mostrar_servidores()
         return False
+    else:
+        return True
+
 activo = True
 while activo:
-    serv = input("Ingresa el nombre del servidor: ")
-    activo = finalizar(serv)
-    if activo == False:
-        break
-    while True:
-        try:
-            ram_actual = int(input("Ingresa el porcentaje de consumo de RAM del servidor seleccionado: "))
-        except ValueError:
-            print("Solo puedes ingresar números enteros")
-        activo = finalizar(ram_actual)
+    try:
+        print("-"*50)
+        serv = input("Ingresa el nombre del servidor: ")
+        activo = finalizar(serv)
         if activo == False:
             break
-        if ram_actual > 100:
-            print("Solo puedes ignresar números entre 0 y 100")
-            continue
-        elif ram_actual < 0:
-            print("Solo puede ingresar números entreos positivos")
-            continue
+        while True:
+            print("-"*50)
+            ram_actual = input("Ingresa el porcentaje de consumo de RAM del servidor seleccionado: ")
+            if ram_actual.lstrip("-").isdigit():
+                ram_actual = int(ram_actual)
+                if ram_actual > 100:
+                    print("Solo puedes ignresar números entre 0 y 100")
+                    continue
+                elif ram_actual < 0:
+                    print("Solo puede ingresar números enteros positivos")
+                    continue
+            if type(ram_actual) is str:
+                activo = finalizar(ram_actual)
+                if activo == False:
+                    break
+                else:
+                    print("Ingreso Inválido")
+                    continue
+            break
+        if activo == False:
+            break
+        analizar_consumo(serv, ram_actual)
+        promedio = promedio_datos(serv)
+        if promedio >= 85:
+            print(f"[🚨 ALERTA] Servidor {serv} con sobrecarga sostenida de RAM") 
+        mostrar_servidores()
+    except KeyboardInterrupt:
+        print("Sistema Bloqueado")
+        mostrar_servidores()
         break
-    if activo == False:
-        break
-    promedio = promedio_datos(serv)
-    if promedio >= 85:
-        print(f"[🚨 ALERTA] Servidor {serv} con sobrecarga sostenida de RAM") 
-
-    analizar_consumo(serv, ram_actual)
-    print(telemetria_ram)

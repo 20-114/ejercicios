@@ -1,2 +1,1 @@
-if activo == False:
-#     break
+    # print(act_servidor)

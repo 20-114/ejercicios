@@ -66,7 +66,7 @@ Protege el menú contra ingresos inválidos y capturas vacías.
 
 
 cluster_servicios = {
-    'auth-api': {'version ': 'v2.1.0', 'replicas': 3, 'status  ': 'Active'}
+    'auth-api': {'version': 'v2.1.0', 'replicas': 3, 'status': 'Active'}
 }
 
 def agregar_servicio():
@@ -74,11 +74,15 @@ def agregar_servicio():
     while activo_agregar:
         print("-"*50)
         new_service = input("Ingresa el nombre del nuevo servicio \n : ")
+        if not new_service:
+            continue 
         activo_agregar = cancelar_proceso(new_service)
         if activo_agregar == False:
             break
         if new_service not in cluster_servicios:
             version = input("Indique la versión del servicio (Ejem. v1.0.0)\n : ")
+            if not version:
+                continue
             activo_agregar = cancelar_proceso(version)
             if activo_agregar == False:
                 break
@@ -97,9 +101,9 @@ def agregar_servicio():
                     print("Solo puede ingresar números enteros positivos")
             if activo_agregar == False:
                 break
-            cluster_servicios[new_service] = {'versión ' : version}
+            cluster_servicios[new_service] = {'version' : version}
             cluster_servicios[new_service]['replicas'] = replicas
-            cluster_servicios[new_service]['status  '] = 'Active'
+            cluster_servicios[new_service]['status'] = 'Active'
         else:
             print(f"Ya existe un servicio llamado {new_service}")
             continue
@@ -116,10 +120,7 @@ def ver_estado():
         match op:
             case "1":
                 print("-"*50)
-                for servicio, propiedades in cluster_servicios.items():
-                    print(F"Propiedades del servicio {servicio}:")
-                    for propiedad, parametro in propiedades.items():
-                        print("*"*6 , f"{propiedad} : {parametro}")
+                mostrar_servicios()
             case "2":
                 while True:
                     servicio =  input("Ingresa el servicio que deseas listar: ")
@@ -139,25 +140,120 @@ def ver_estado():
                 print("Opción Inválida")
                 continue
         
-# def act_infraestructura():
+def act_infraestructura():
+    activo_actualizar = True
+    while activo_actualizar:
+        mostrar_servicios()
+        servicio = input("Indica que servicio quieres modificar: ")
+        if not servicio:
+            continue
+        activo_actualizar = cancelar_proceso(servicio)
+        if activo_actualizar == False:
+            break
+        if servicio not in cluster_servicios:
+            print("El servicio no existe en el sistema")
+            continue
+        act_servicio = cluster_servicios[servicio]
+        # print(act_servicio)
+        act = input(f"¿Que deseas actualizar del servicio {servicio} \n1. Versión \n2. Número de replicas \n : ")
+        if not act:
+            continue
+        activo_actualizar = cancelar_proceso(act)
+        if activo_actualizar == False:
+            break
+        match act:
+            case "1":
+                while True:
+                    new_version = input("Ingresa la nueva versión del servicio: ")
+                    if not new_version:
+                        continue
+                    activo_actualizar = cancelar_proceso(new_version)
+                    if activo_actualizar == False:
+                        break
+                    if new_version == act_servicio['version']:
+                        print("Esta versión ya existe")
+                        continue 
+                    act_servicio['version'] = new_version
+                    break
+            case "2":
+                while True:
+                    try:
+                        new_replica = input("Ingresa el número de replicas que quieres mantener levantadas: ").upper()
+                        if not new_replica:
+                            continue
+                        if new_replica == "EXIT":
+                            activo_actualizar = cancelar_proceso(new_replica)
+                            if activo_actualizar == False:
+                                break
+                        else:
+                            new_replica = int(new_replica)
+                        if new_replica == act_servicio['replicas']:
+                            print("Ya existe ese número de replicas")
+                            continue
+                        elif new_replica < 0:
+                            print("Solo puedes ingresar números enteros positivos")
+                            continue
+                        else:
+                            act_servicio['replicas'] = new_replica
+                            break
+                    except ValueError:
+                        print("Solo puedes ingresar números enteros positivos")
+            case _:
+                print("Opción Inválida")
+        break
 
-# def remover_servicio():
-
+def remover_servicio():
+    activo_remover = True
+    while activo_remover:
+        if not cluster_servicios:
+            print("No existen servicios actualmente")
+            break 
+        mostrar_servicios()
+        while True:
+            del_servicio = input("Indica que servicio desea aliminar: ")
+            if not del_servicio:
+                continue
+            activo_remover = cancelar_proceso(del_servicio)
+            if activo_remover == False:
+                break
+            if del_servicio not in cluster_servicios.keys():
+                print("El servicio solicitado no existe en los registros")
+                continue
+            else:
+                print("¿Esta seguro de liminar el servicio?")
+                op = input("SI | NO : ").upper()
+                activo_remover = cancelar_proceso(op)
+                if activo_remover == False:
+                    break
+                match op:
+                    case "SI":
+                        del cluster_servicios[del_servicio]
+                        break
+                    case "NO":
+                        break
+                    case _:
+                        print("Opción Inválida")
+        break
 
 def cancelar_proceso(ingreso):
     if ingreso.upper() == "EXIT":
         return False
     else:
         return True
-# if activo == False:
-#     break
+
+def mostrar_servicios():
+    for servicio, propiedades in cluster_servicios.items():
+        print(F"Propiedades del servicio {servicio}:")
+        for propiedad, parametro in propiedades.items():
+            print("*"*6 , f"{propiedad} : {parametro}")
+
 def flujo_principal():
     activo = True
     while activo:
         print("ADMINISTRACIÓN DE CLUSTER DE INSTANCIAS")
         print("1. Desplegar Servicio \n2. Monitorear Clúster \n3. Escalar/Actualizar \n4. Dar de Baja \n5. Apagar Consola")
         try:
-            op = input("").upper()
+            op = input(" : ").upper()
             match op:
                 case '1':
                     agregar_servicio()
@@ -176,9 +272,8 @@ def flujo_principal():
                     print("Opción Inexistente")
                     continue
         except KeyboardInterrupt:
-            print("Bloqueo de Emergencia")
+            print("\nBloqueo de Emergencia")
             break
-    print("Sistema cerrado de forma segura")
     
 flujo_principal()
 

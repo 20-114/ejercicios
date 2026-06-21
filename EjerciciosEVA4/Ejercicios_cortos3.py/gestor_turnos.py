@@ -52,7 +52,7 @@ def contratar():
             print("Presiona Ctrl + C para volver")
             print("-"*50)
             new_empleado = input("Ingresa el codigo del nuevo empleado \n--|").upper()
-            if "EMP-" not in new_empleado:
+            if not new_empleado.startswith("EMP-"):
                 print("Registro rechazado")
                 print("El codigo debe comenzar por 'EMP-'")
                 continue
